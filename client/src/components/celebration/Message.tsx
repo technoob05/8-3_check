@@ -46,9 +46,15 @@ export default function Message({ recipient, message }: MessageProps) {
             transition={{ delay: 0.8 }}
           >
             Nhân ngày Quốc tế Phụ nữ, Tin muốn gửi đến bé những lời chúc tốt đẹp
-            nhất. Bé là nguồn cảm hứng và niềm hạnh phúc của cuộc đời Tin. Cảm
+            nhất.</p>
+          <HandwritingText
+            text="Bé là nguồn cảm hứng và niềm hạnh phúc của cuộc đời Tin. Cảm
             ơn bé đã luôn ở bên Tin và làm cho cuộc sống của anh trở nên tuyệt
-            vời hơn mỗi ngày. Mãi Yêu Bé ❤️
+            vời hơn mỗi ngày."
+            className="text-rose-600 font-handwriting text-lg mt-4 leading-relaxed"
+            charDelay={40}
+          />
+          <p className="text-2xl mt-6 font-handwriting text-primary">Mãi Yêu Bé ❤️
           </motion.p>
         </CardContent>
       </Card>

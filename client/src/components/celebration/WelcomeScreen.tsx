@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 
+import HandwritingText from "./HandwritingText";
+
 export default function WelcomeScreen() {
   return (
     <motion.div
@@ -43,8 +45,13 @@ export default function WelcomeScreen() {
             <p className="text-2xl text-muted-foreground mb-2 font-handwriting">
               Gửi đến
             </p>
-            <motion.p 
+            <HandwritingText
+              text="Trương Bảo Trân"
               className="text-3xl font-semibold text-primary font-handwriting"
+              charDelay={100}
+            />
+            <motion.div
+              className="invisible"
               animate={{
                 scale: [1, 1.05, 1],
                 filter: ["brightness(1)", "brightness(1.2)", "brightness(1)"]

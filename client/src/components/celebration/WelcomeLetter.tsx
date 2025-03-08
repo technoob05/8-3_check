@@ -12,11 +12,17 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
   const [noCount, setNoCount] = useState(0);
   const [yesPressed, setYesPressed] = useState(false);
   const [noButtonSize, setNoButtonSize] = useState(100); // Initialize button size
-
+  const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 });
+  const [hoverCount, setHoverCount] = useState(0);
 
   const handleNoClick = () => {
     setNoCount((prevCount) => prevCount + 1);
     setNoButtonSize(Math.max(60, noButtonSize - 5));
+    
+    // Cập nhật vị trí ngẫu nhiên nhưng không gần nút Yes
+    const newX = Math.random() > 0.5 ? Math.random() * 150 : -Math.random() * 150;
+    const newY = Math.random() > 0.5 ? Math.random() * 50 : -Math.random() * 50;
+    setNoButtonPosition({ x: newX, y: newY });
 
     // Âm thanh khác nhau cho mỗi lần nhấn nút "Không"
     const sounds = ['/no-sound1.mp3', '/no-sound2.mp3', '/no-sound3.mp3'];
@@ -28,13 +34,30 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
     window.navigator.vibrate && window.navigator.vibrate(100);
   };
 
+  const handleNoButtonHover = () => {
+    setHoverCount(prev => prev + 1);
+    if (hoverCount > 1) {
+      // Di chuyển nút khi hover
+      const newX = Math.random() > 0.5 ? Math.random() * 180 : -Math.random() * 180;
+      const newY = Math.random() > 0.5 ? Math.random() * 60 : -Math.random() * 60;
+      setNoButtonPosition({ x: newX, y: newY });
+    }
+  };
+
   const handleYesClick = () => {
     setYesPressed(true);
 
     // Tạo âm thanh khi nhấn nút "Có"
-    const audio = new Audio('/yes-sound.mp3');
-    audio.volume = 0.5;
-    audio.play().catch(e => console.log('Auto-play prevented:', e));
+    const successAudio = new Audio('/yes-sound.mp3');
+    successAudio.volume = 0.5;
+    successAudio.play().catch(e => console.log('Auto-play prevented:', e));
+    
+    // Thêm âm thanh chúc mừng
+    setTimeout(() => {
+      const congratsAudio = new Audio('/congrats-sound.mp3');
+      congratsAudio.volume = (0.3);
+      congratsAudio.play().catch(e => console.log('Auto-play prevented:', e));
+    }, 800);
 
     // Hiệu ứng rung nhẹ
     window.navigator.vibrate && window.navigator.vibrate(200);
@@ -174,18 +197,21 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
                 <motion.div
                   style={{ width: noButtonSize }}
                   animate={{
-                    x: noCount % 2 === 0 ? (noCount > 0 ? 150 : 0) : -150,
-                    y: noCount > 1 ? Math.sin(noCount) * 50 : 0,
+                    x: noButtonPosition.x,
+                    y: noButtonPosition.y,
                     scale: 1 - noCount * 0.05,
                     opacity: 1 - noCount * 0.1,
+                    zIndex: 10
                   }}
                   whileHover={{ scale: 0.9 }}
+                  onHoverStart={handleNoButtonHover}
                   transition={{ type: "spring", stiffness: 500, damping: 10 }}
+                  className="absolute"
                 >
                   <Button
                     onClick={handleNoClick}
                     variant="outline"
-                    className="w-full font-handwriting text-lg opacity-70 shadow-sm"
+                    className="w-full font-handwriting text-lg opacity-70 shadow-sm hover:bg-pink-100"
                     disabled={yesPressed}
                   >
                     {noCount === 0
