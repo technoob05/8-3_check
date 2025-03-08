@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       <ParticleBackground />
-      
+
       <AnimatePresence>
         {showWelcome && <WelcomeScreen />}
       </AnimatePresence>
@@ -36,18 +36,18 @@ export default function Home() {
             className="container mx-auto px-4 py-8"
           >
             <HeartAnimation />
-            
+
             <Message 
               recipient="Trương Bảo Trân"
-              message="On this special Women's Day, I want to celebrate you and everything you mean to me. Your presence in my life makes every day brighter and more meaningful."
+              message="Chúc em một ngày 8/3 thật hạnh phúc và tràn ngập niềm vui. Em là điều tuyệt vời nhất đến với cuộc sống của anh. Cảm ơn em vì đã luôn là người phụ nữ tuyệt vời nhất."
             />
 
             <Gallery 
               images={[
-                "https://images.unsplash.com/photo-1598609344624-2454d4dbf40c",
-                "https://images.unsplash.com/photo-1594267329747-06924aa14b93",
-                "https://images.unsplash.com/photo-1513151233558-d860c5398176",
-                "https://images.unsplash.com/photo-1517867065801-e20f409696b0"
+                "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?ixlib=rb-4.0.3",
+                "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?ixlib=rb-4.0.3",
+                "https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-4.0.3",
+                "https://images.unsplash.com/photo-1517867065801-e20f409696b0?ixlib=rb-4.0.3"
               ]} 
             />
           </motion.div>
