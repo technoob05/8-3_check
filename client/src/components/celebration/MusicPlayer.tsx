@@ -1,52 +1,8 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Music, Pause, Play, SkipForward, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-
-export default function MusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentSong, setCurrentSong] = useState(0);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const analyser = useRef<AnalyserNode | null>(null);
-  const dataArray = useRef<Uint8Array | null>(null);
-
-  const songList = [
-    {
-      title: "Happy Women's Day",
-      artist: "Special Song",
-      url: "./music.mp3"
-    }
-  ];
-
-  useEffect(() => {
-    // Try to autoplay when component mounts
-    if (audioRef.current) {
-      audioRef.current.play()
-        .then(() => {
-          setIsPlaying(true);
-        })
-        .catch(error => {
-          console.log("Autoplay prevented:", error);
-          // Browser may prevent autoplay, will need user interaction
-        });
-    }
-  }, []);
-
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Music, Pause, Play, SkipForward, Volume2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-
-const songList = [
-  {
-    title: "Our Song",
-    url: "/music.mp3"
-  }
-];
 
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(true); // Start playing automatically
@@ -56,6 +12,13 @@ export default function MusicPlayer() {
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const songList = [
+    {
+      title: "Our Song",
+      url: "/music.mp3"
+    }
+  ];
 
   // Auto-play when component mounts
   useEffect(() => {
@@ -143,35 +106,14 @@ export default function MusicPlayer() {
         autoPlay
         onCanPlay={(e) => e.currentTarget.play().catch(err => console.log("Autoplay prevented:", err))}
       />
-
-      <div className="relative">
-        <Button
-          variant="outline"
-          size="icon"
-          className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300"
-          onClick={togglePlay}
-        >
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {isPlaying ? (
-              <Pause className="h-4 w-4" />
-            ) : (
-              <Play className="h-4 w-4" />
-            )}
-          </motion.div>
-        </Button>
-
-        {isPlaying && (
-          <canvas
-            ref={canvasRef}
-            width="200"
-            height="60"
-            className="absolute -top-16 right-0 opacity-70"
-          />
-        )}
-      </div>
+      <Card className="p-4 flex items-center gap-4 bg-white/80 backdrop-blur-sm shadow-lg">
+        <canvas ref={canvasRef} width="100" height="40" className="rounded-md" />
+        <div className="flex items-center gap-2">
+          <Button size="icon" variant="ghost" onClick={togglePlay}>
+            {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+          </Button>
+        </div>
+      </Card>
     </motion.div>
   );
 }
