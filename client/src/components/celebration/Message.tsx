@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
@@ -28,7 +27,7 @@ export default function Message({ recipient, message }: MessageProps) {
     if (showMessage) {
       // Calculate message duration based on length (approx. 60ms per character)
       const messageDuration = message.length * 60 + 1000;
-      
+
       const messageTimer = setTimeout(() => {
         setMessageComplete(true);
         setShowStory(true);
@@ -41,8 +40,8 @@ export default function Message({ recipient, message }: MessageProps) {
   // Notify parent when message complete
   useEffect(() => {
     // You can dispatch an event or use a callback here if needed
-    const messageCompleteEvent = new CustomEvent('messageComplete', { 
-      detail: { complete: messageComplete } 
+    const messageCompleteEvent = new CustomEvent("messageComplete", {
+      detail: { complete: messageComplete },
     });
     if (messageComplete) {
       document.dispatchEvent(messageCompleteEvent);
@@ -99,16 +98,14 @@ export default function Message({ recipient, message }: MessageProps) {
               className="mt-8 space-y-6"
             >
               <HandwritingText
-                text="Bé là nguồn cảm hứng và niềm hạnh phúc của cuộc đời Tin. Cảm ơn bé đã luôn ở bên Tin và làm cho cuộc sống của anh trở nên tuyệt vời hơn mỗi ngày."
+                text="Bé là nguồn cảm hứng, là ánh sáng rực rỡ trong cuộc đời Tin. Cảm ơn bé vì đã luôn ở bên, làm cho mỗi ngày của anh trở nên ý nghĩa và ấm áp hơn bao giờ hết."
                 className="text-rose-600 font-handwriting text-lg leading-relaxed"
                 charDelay={40}
               />
               <p className="text-2xl mt-6 font-handwriting text-primary">
-                Yêu em,
+                Yêu bé thật nhiều,
               </p>
-              <p className="text-2xl font-handwriting text-primary">
-                Tin
-              </p>
+              <p className="text-2xl font-handwriting text-primary">Tin 💖</p>
             </motion.div>
           )}
         </AnimatePresence>
