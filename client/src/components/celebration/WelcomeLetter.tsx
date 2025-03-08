@@ -1,6 +1,7 @@
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import confetti from 'canvas-confetti';
 
 interface WelcomeLetterProps {
   onLetterOpen: () => void;
@@ -10,29 +11,64 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
   const [isLetterOpen, setIsLetterOpen] = useState(false);
   const [noCount, setNoCount] = useState(0);
   const [yesPressed, setYesPressed] = useState(false);
+  const [noButtonSize, setNoButtonSize] = useState(100); // Initialize button size
 
-  const noButtonSize = Math.max(50, 100 - noCount * 10); // Button gets smaller
-  const yesButtonSize = 100 + noCount * 20; // Button gets bigger
 
   const handleNoClick = () => {
-    setNoCount((count) => count + 1);
+    setNoCount((prevCount) => prevCount + 1);
+    setNoButtonSize(Math.max(60, noButtonSize - 5));
+
+    // Âm thanh khác nhau cho mỗi lần nhấn nút "Không"
+    const sounds = ['/no-sound1.mp3', '/no-sound2.mp3', '/no-sound3.mp3'];
+    const audio = new Audio(sounds[noCount % sounds.length]);
+    audio.volume = 0.3;
+    audio.play().catch(e => console.log('Auto-play prevented:', e));
+
+    // Hiệu ứng rung nhẹ
+    window.navigator.vibrate && window.navigator.vibrate(100);
   };
 
   const handleYesClick = () => {
     setYesPressed(true);
 
-    // Fire a custom event to trigger music playback
-    window.dispatchEvent(new CustomEvent("letterOpened"));
+    // Tạo âm thanh khi nhấn nút "Có"
+    const audio = new Audio('/yes-sound.mp3');
+    audio.volume = 0.5;
+    audio.play().catch(e => console.log('Auto-play prevented:', e));
 
-    // Also try direct method as fallback
-    const audio = document.querySelector("audio");
-    if (audio) {
-      audio.play().catch((e) => console.log("Could not play audio:", e));
-    }
+    // Hiệu ứng rung nhẹ
+    window.navigator.vibrate && window.navigator.vibrate(200);
+
+    // Hiệu ứng confetti
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#ff0000', '#ff69b4', '#ff77ff', '#ff007f', '#ff1493']
+    });
+
+    // Nhiều confetti hơn sau một chút
+    setTimeout(() => {
+      confetti({
+        particleCount: 200,
+        angle: 60,
+        spread: 100,
+        origin: { x: 0 },
+        colors: ['#ff0000', '#ff69b4', '#ff77ff', '#ff007f', '#ff1493']
+      });
+
+      confetti({
+        particleCount: 200,
+        angle: 120,
+        spread: 100,
+        origin: { x: 1 },
+        colors: ['#ff0000', '#ff69b4', '#ff77ff', '#ff007f', '#ff1493']
+      });
+    }, 500);
 
     setTimeout(() => {
       onLetterOpen();
-    }, 1000);
+    }, 2200);
   };
 
   return (
@@ -118,58 +154,84 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
               <h2 className="text-3xl font-handwriting text-primary mb-8">
                 Bảo Trân có yêu Tin không? 💝
               </h2>
-              <div className="flex flex-col gap-4 items-center">
+              <div className="flex gap-4 mt-6 relative">
                 <motion.div
-                  style={{ width: yesButtonSize }}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
+                  initial={{ y: 0 }}
+                  animate={yesPressed ? { y: -10, scale: 1.2 } : { y: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
                 >
                   <Button
                     onClick={handleYesClick}
-                    className="w-full font-handwriting text-lg bg-primary hover:bg-primary/90"
+                    className="w-full font-handwriting text-lg bg-gradient-to-r from-pink-500 to-rose-400 shadow-lg"
                     disabled={yesPressed}
                   >
-                    Có,Bé yêu Tin! 💖
+                    {yesPressed ? "❤️ Đúng vậy! ❤️" : "Có, tất nhiên rồi! ❤️"}
                   </Button>
                 </motion.div>
 
                 <motion.div
                   style={{ width: noButtonSize }}
                   animate={{
-                    x: noCount % 2 === 0 ? 100 : -100,
-                    scale: 1 - noCount * 0.1,
+                    x: noCount % 2 === 0 ? (noCount > 0 ? 150 : 0) : -150,
+                    y: noCount > 1 ? Math.sin(noCount) * 50 : 0,
+                    scale: 1 - noCount * 0.05,
+                    opacity: 1 - noCount * 0.1,
                   }}
                   whileHover={{ scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 10 }}
                 >
                   <Button
                     onClick={handleNoClick}
                     variant="outline"
-                    className="w-full font-handwriting text-lg opacity-50"
+                    className="w-full font-handwriting text-lg opacity-70 shadow-sm"
                     disabled={yesPressed}
                   >
-                    {noCount === 0 ? "Không..." : "Thật không vậy? 🥺"}
+                    {noCount === 0
+                      ? "Không..."
+                      : noCount === 1
+                        ? "Thật không vậy? 🥺"
+                        : noCount === 2
+                          ? "Hãy suy nghĩ lại! 😥"
+                          : noCount === 3
+                            ? "Thử lần nữa nha... 💔"
+                            : "Chắc là có đúng không? 🙏"}
                   </Button>
                 </motion.div>
               </div>
-            </motion.div>
 
-            {yesPressed && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="absolute inset-0 flex items-center justify-center bg-pink-500/20 backdrop-blur-sm"
-              >
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", duration: 0.5 }}
-                  className="text-4xl"
-                >
-                  ❤️
-                </motion.div>
-              </motion.div>
-            )}
+              {/* Floating hearts when yes is pressed */}
+              {yesPressed && (
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                  {[...Array(15)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute text-2xl"
+                      initial={{
+                        x: Math.random() * 300 - 150,
+                        y: 300,
+                        opacity: 0,
+                        scale: Math.random() * 0.5 + 0.5
+                      }}
+                      animate={{
+                        y: -300,
+                        opacity: [0, 1, 0],
+                        rotate: Math.random() * 360
+                      }}
+                      transition={{
+                        duration: Math.random() * 2 + 1,
+                        delay: Math.random() * 0.5,
+                        repeat: Infinity,
+                        repeatDelay: Math.random() * 2
+                      }}
+                    >
+                      {Math.random() > 0.5 ? "❤️" : "💖"}
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
