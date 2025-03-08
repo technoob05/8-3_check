@@ -50,6 +50,7 @@ export default function WelcomeScreen() {
               className="text-3xl font-semibold text-primary font-handwriting"
               charDelay={100}
             />
+            />
           </motion.div>
             />
             <motion.div
