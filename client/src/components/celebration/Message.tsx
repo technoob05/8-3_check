@@ -21,7 +21,7 @@ export default function Message({ recipient, message }: MessageProps) {
             animate={{ x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold text-primary mb-4 relative">
+            <h2 className="text-3xl font-bold text-primary mb-4 relative font-handwriting">
               Gửi {recipient} yêu quý,
               <motion.span
                 className="absolute -top-1 -right-4 text-2xl"
@@ -40,7 +40,7 @@ export default function Message({ recipient, message }: MessageProps) {
             </h2>
           </motion.div>
           <motion.p 
-            className="text-lg leading-relaxed text-foreground"
+            className="text-lg leading-relaxed text-foreground font-handwriting"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}

@@ -5,6 +5,9 @@ import Gallery from "@/components/celebration/Gallery";
 import Message from "@/components/celebration/Message";
 import ParticleBackground from "@/components/celebration/ParticleBackground";
 import HeartAnimation from "@/components/celebration/HeartAnimation";
+import MusicPlayer from "@/components/celebration/MusicPlayer";
+import Fireworks from "@/components/celebration/Fireworks";
+import HandwritingText from "@/components/celebration/HandwritingText";
 
 export default function Home() {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -19,9 +22,35 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  const pageVariants = {
+    initial: {
+      opacity: 0,
+      scale: 0.8,
+      rotateX: 90,
+    },
+    animate: {
+      opacity: 1,
+      scale: 1,
+      rotateX: 0,
+      transition: {
+        duration: 1,
+        ease: "easeOut",
+      },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.8,
+      rotateX: -90,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
+
   return (
-    <div className="min-h-screen bg-background overflow-hidden">
+    <div className="min-h-screen bg-background overflow-hidden perspective-1000">
       <ParticleBackground />
+      <Fireworks />
 
       <AnimatePresence>
         {showWelcome && <WelcomeScreen />}
@@ -30,12 +59,26 @@ export default function Home() {
       <AnimatePresence>
         {showContent && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             className="container mx-auto px-4 py-8"
           >
             <HeartAnimation />
+            <MusicPlayer />
+
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="text-center mb-8"
+            >
+              <HandwritingText
+                text="Gửi đến người con gái anh yêu"
+                className="text-2xl text-primary font-semibold mb-4"
+              />
+            </motion.div>
 
             <Message 
               recipient="Trương Bảo Trân"

@@ -21,10 +21,11 @@ export default function WelcomeScreen() {
           className="transform-gpu"
         >
           <motion.h1 
-            className="text-4xl font-bold text-primary mb-4"
+            className="text-4xl font-bold text-primary mb-4 font-handwriting"
             animate={{ 
               y: [0, -10, 0],
-              scale: [1, 1.1, 1]
+              scale: [1, 1.1, 1],
+              rotateZ: [0, 2, -2, 0]
             }}
             transition={{ 
               duration: 2,
@@ -39,12 +40,23 @@ export default function WelcomeScreen() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <p className="text-2xl text-muted-foreground mb-2">
+            <p className="text-2xl text-muted-foreground mb-2 font-handwriting">
               Gửi đến
             </p>
-            <p className="text-3xl font-semibold text-primary">
+            <motion.p 
+              className="text-3xl font-semibold text-primary font-handwriting"
+              animate={{
+                scale: [1, 1.05, 1],
+                filter: ["brightness(1)", "brightness(1.2)", "brightness(1)"]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
               Trương Bảo Trân
-            </p>
+            </motion.p>
           </motion.div>
         </motion.div>
       </Card>
