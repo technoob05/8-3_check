@@ -51,6 +51,7 @@ export default function WelcomeScreen() {
               charDelay={100}
             />
             />
+            />
           </motion.div>
             />
             <motion.div
