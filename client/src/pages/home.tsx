@@ -10,7 +10,6 @@ import Fireworks from "@/components/celebration/Fireworks";
 import HandwritingText from "@/components/celebration/HandwritingText";
 import GuideCharacter from "@/components/celebration/GuideCharacter";
 import WelcomeLetter from "@/components/celebration/WelcomeLetter";
-import HandwritingText from "@/components/celebration/HandwritingText";
 
 export default function Home() {
   const [showWelcome, setShowWelcome] = useState(true);
