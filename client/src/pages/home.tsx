@@ -21,11 +21,11 @@ export default function Home() {
       const timer = setTimeout(() => {
         setShowWelcome(false);
         setShowContent(true);
-      }, 6000);  // Tăng thời gian từ 3000 lên 6000 (6 giây)
+      }, 6000);  // Đợi 6 giây sau khi mở thư mới hiển thị nội dung chính
 
       return () => clearTimeout(timer);
     }
-  }, [letterOpened]);
+  }, [letterOpenedened]);
 
   const pageVariants = {
     initial: {

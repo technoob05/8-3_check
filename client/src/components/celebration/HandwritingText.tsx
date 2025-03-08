@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface HandwritingTextProps {
   text: string;
@@ -8,63 +8,42 @@ interface HandwritingTextProps {
   onComplete?: () => void;
 }
 
-export default function HandwritingText({
-  text,
-  className = "",
-  charDelay = 50,
-  onComplete,
+export default function HandwritingText({ 
+  text, 
+  className = "", 
+  charDelay = 100,
+  onComplete
 }: HandwritingTextProps) {
-  const [visibleChars, setVisibleChars] = useState(0);
-  const [isComplete, setIsComplete] = useState(false);
+  const [displayedText, setDisplayedText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    if (visibleChars < text.length) {
+    if (currentIndex < text.length) {
       const timer = setTimeout(() => {
-        setVisibleChars(visibleChars + 1);
+        setDisplayedText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
       }, charDelay);
+
       return () => clearTimeout(timer);
-    } else if (!isComplete) {
-      setIsComplete(true);
-      onComplete && onComplete();
+    } else if (currentIndex === text.length && onComplete) {
+      onComplete();
     }
-  }, [visibleChars, text, charDelay, isComplete, onComplete]);
+  }, [currentIndex, text, charDelay, onComplete]);
 
   return (
-    <span className={`${className} inline-block`}>
-      <AnimatePresence>
-        {text.split("").map((char, index) => (
-          index < visibleChars && (
-            <motion.span
-              key={index}
-              initial={{ 
-                opacity: 0, 
-                y: 10,
-                rotateZ: Math.random() * 5 * (Math.random() > 0.5 ? 1 : -1),
-                scale: 0.8
-              }}
-              animate={{ 
-                opacity: 1, 
-                y: 0,
-                rotateZ: 0,
-                scale: 1
-              }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ 
-                duration: 0.2,
-                type: "spring",
-                stiffness: 100,
-                damping: 10
-              }}
-              style={{ 
-                display: "inline-block",
-                transformOrigin: "bottom center"
-              }}
-            >
-              {char === " " ? "\u00A0" : char}
-            </motion.span>
-          )
-        ))}
-      </AnimatePresence>
-    </span>
+    <motion.div 
+      className={className}
+      initial={{ opacity: 0.5 }}
+      animate={{ opacity: 1 }}
+    >
+      {displayedText}
+      <motion.span
+        animate={{ opacity: [1, 0, 1] }}
+        transition={{ duration: 0.8, repeat: Infinity }}
+        style={{ display: currentIndex < text.length ? 'inline-block' : 'none' }}
+      >
+        |
+      </motion.span>
+    </motion.div>
   );
 }
