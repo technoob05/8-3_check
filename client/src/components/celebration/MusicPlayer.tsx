@@ -103,6 +103,7 @@ export default function MusicPlayer() {
         ref={audioRef}
         src={songList[currentSong].url}
         loop
+        autoPlay
       />
 
       <div className="relative">

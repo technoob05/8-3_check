@@ -20,6 +20,11 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
 
   const handleYesClick = () => {
     setYesPressed(true);
+    // Play music when letter is opened
+    const audio = document.querySelector('audio');
+    if (audio) {
+      audio.play();
+    }
     setTimeout(() => {
       onLetterOpen();
     }, 1000);
@@ -125,7 +130,7 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
 
                 <motion.div
                   style={{ width: noButtonSize }}
-                  animate={{ 
+                  animate={{
                     x: noCount % 2 === 0 ? 100 : -100,
                     scale: 1 - noCount * 0.1
                   }}
