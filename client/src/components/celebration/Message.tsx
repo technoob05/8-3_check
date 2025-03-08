@@ -39,15 +39,16 @@ export default function Message({ recipient, message }: MessageProps) {
               </motion.span>
             </h2>
           </motion.div>
-          <motion.p 
+          <motion.p
             className="text-lg leading-relaxed text-foreground font-handwriting"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
           >
-            Nhân ngày Quốc tế Phụ nữ, anh muốn gửi đến em những lời chúc tốt đẹp nhất. 
-            Em là nguồn cảm hứng và niềm hạnh phúc của anh. 
-            Cảm ơn em đã luôn ở bên anh và làm cho cuộc sống của anh trở nên tuyệt vời hơn mỗi ngày.
+            Nhân ngày Quốc tế Phụ nữ, Tin muốn gửi đến bé những lời chúc tốt đẹp
+            nhất. Bé là nguồn cảm hứng và niềm hạnh phúc của cuộc đời Tin. Cảm
+            ơn bé đã luôn ở bên Tin và làm cho cuộc sống của anh trở nên tuyệt
+            vời hơn mỗi ngày. Mãi Yêu Bé ❤️
           </motion.p>
         </CardContent>
       </Card>

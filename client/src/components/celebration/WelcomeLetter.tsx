@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 interface WelcomeLetterProps {
@@ -15,21 +15,21 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
   const yesButtonSize = 100 + noCount * 20; // Button gets bigger
 
   const handleNoClick = () => {
-    setNoCount(count => count + 1);
+    setNoCount((count) => count + 1);
   };
 
   const handleYesClick = () => {
     setYesPressed(true);
-    
+
     // Fire a custom event to trigger music playback
-    window.dispatchEvent(new CustomEvent('letterOpened'));
-    
+    window.dispatchEvent(new CustomEvent("letterOpened"));
+
     // Also try direct method as fallback
-    const audio = document.querySelector('audio');
+    const audio = document.querySelector("audio");
     if (audio) {
-      audio.play().catch(e => console.log("Could not play audio:", e));
+      audio.play().catch((e) => console.log("Could not play audio:", e));
     }
-    
+
     setTimeout(() => {
       onLetterOpen();
     }, 1000);
@@ -56,7 +56,7 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
                 className="absolute top-0 left-0 w-full h-32 bg-pink-200 origin-bottom"
                 initial={{ rotateX: 0 }}
                 whileHover={{ rotateX: 30 }}
-                style={{ transformStyle: 'preserve-3d' }}
+                style={{ transformStyle: "preserve-3d" }}
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-pink-300 to-pink-200" />
               </motion.div>
@@ -116,7 +116,7 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
               className="text-center"
             >
               <h2 className="text-3xl font-handwriting text-primary mb-8">
-                Em có yêu anh không? 💝
+                Bảo Trân có yêu Tin không? 💝
               </h2>
               <div className="flex flex-col gap-4 items-center">
                 <motion.div
@@ -129,7 +129,7 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
                     className="w-full font-handwriting text-lg bg-primary hover:bg-primary/90"
                     disabled={yesPressed}
                   >
-                    Có, em yêu anh! 💖
+                    Có,Bé yêu Tin! 💖
                   </Button>
                 </motion.div>
 
@@ -137,7 +137,7 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
                   style={{ width: noButtonSize }}
                   animate={{
                     x: noCount % 2 === 0 ? 100 : -100,
-                    scale: 1 - noCount * 0.1
+                    scale: 1 - noCount * 0.1,
                   }}
                   whileHover={{ scale: 0.9 }}
                 >
@@ -147,7 +147,7 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
                     className="w-full font-handwriting text-lg opacity-50"
                     disabled={yesPressed}
                   >
-                    {noCount === 0 ? 'Không...' : 'Thật không vậy? 🥺'}
+                    {noCount === 0 ? "Không..." : "Thật không vậy? 🥺"}
                   </Button>
                 </motion.div>
               </div>

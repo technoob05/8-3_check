@@ -93,12 +93,12 @@ export default function Home() {
                 />
               </motion.div>
 
-              <Message 
-                recipient="Trương Bảo Trân"
+              <Message
+                recipient="Bé Bảo Trân"
                 message="Chúc em một ngày 8/3 thật hạnh phúc và tràn ngập niềm vui. Em là điều tuyệt vời nhất đến với cuộc sống của anh. Cảm ơn em vì đã luôn là người phụ nữ tuyệt vời nhất."
               />
 
-              <Gallery 
+              <Gallery
                 images={[
                   "/1.jpg",
                   "/2.png",
@@ -106,10 +106,10 @@ export default function Home() {
                   "/5.png",
                   "/6.png",
                   "/7.jpg",
-                  "/8.jpg"
-                ]} 
+                  "/8.jpg",
+                ]}
               />
-              </motion.div>
+            </motion.div>
           </>
         )}
       </AnimatePresence>
