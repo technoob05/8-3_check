@@ -20,11 +20,16 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
 
   const handleYesClick = () => {
     setYesPressed(true);
-    // Play music when letter is opened
+    
+    // Fire a custom event to trigger music playback
+    window.dispatchEvent(new CustomEvent('letterOpened'));
+    
+    // Also try direct method as fallback
     const audio = document.querySelector('audio');
     if (audio) {
-      audio.play();
+      audio.play().catch(e => console.log("Could not play audio:", e));
     }
+    
     setTimeout(() => {
       onLetterOpen();
     }, 1000);

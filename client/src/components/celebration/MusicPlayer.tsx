@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 export default function MusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(true); // Start playing automatically
+  const [isPlaying, setIsPlaying] = useState(false);
   const [currentSong, setCurrentSong] = useState(0);
   const [showPlaylist, setShowPlaylist] = useState(false);
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
@@ -20,14 +20,30 @@ export default function MusicPlayer() {
     }
   ];
 
-  // Auto-play when component mounts
+  // Auto-play when component mounts or when letter is opened
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.play().catch(error => {
-        console.log("Auto-play prevented:", error);
-        setIsPlaying(false);
-      });
-    }
+    const startMusic = () => {
+      if (audioRef.current) {
+        audioRef.current.volume = 0.5; // Set volume to 50%
+        audioRef.current.play()
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch(error => {
+            console.log("Auto-play prevented:", error);
+            setIsPlaying(false);
+          });
+      }
+    };
+
+    startMusic();
+    
+    // Listen for custom event from WelcomeLetter
+    window.addEventListener('letterOpened', startMusic);
+    
+    return () => {
+      window.removeEventListener('letterOpened', startMusic);
+    };
   }, []);
 
   useEffect(() => {
@@ -103,16 +119,24 @@ export default function MusicPlayer() {
         ref={audioRef}
         src={songList[currentSong].url}
         loop
-        autoPlay
         onCanPlay={(e) => e.currentTarget.play().catch(err => console.log("Autoplay prevented:", err))}
       />
-      <Card className="p-4 flex items-center gap-4 bg-white/80 backdrop-blur-sm shadow-lg">
-        <canvas ref={canvasRef} width="100" height="40" className="rounded-md" />
-        <div className="flex items-center gap-2">
-          <Button size="icon" variant="ghost" onClick={togglePlay}>
-            {isPlaying ? <Pause size={18} /> : <Play size={18} />}
-          </Button>
+      <Card className="p-3 flex items-center gap-3 bg-pink-100/90 backdrop-blur-sm shadow-lg border-pink-300 hover:bg-pink-100 transition-all duration-300">
+        <div className="flex-shrink-0">
+          <Music className="h-5 w-5 text-pink-500" />
         </div>
+        <div className="flex-grow">
+          <p className="text-sm font-medium text-pink-700">{songList[currentSong].title}</p>
+          <canvas ref={canvasRef} width="100" height="20" className="rounded-md" />
+        </div>
+        <Button 
+          size="icon" 
+          variant="outline" 
+          onClick={togglePlay}
+          className="h-8 w-8 rounded-full bg-pink-500 hover:bg-pink-600 border-pink-400 text-white flex-shrink-0"
+        >
+          {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+        </Button>
       </Card>
     </motion.div>
   );
