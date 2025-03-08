@@ -6,27 +6,29 @@ import { Card } from '@/components/ui/card';
 
 const songList = [
   {
-    title: "Love Story",
-    url: "https://assets.mixkit.co/music/preview/mixkit-a-very-happy-christmas-897.mp3"
-  },
-  {
-    title: "Perfect",
-    url: "https://assets.mixkit.co/music/preview/mixkit-valley-sunset-127.mp3"
-  },
-  {
-    title: "Beautiful In White",
-    url: "https://assets.mixkit.co/music/preview/mixkit-serene-morning-light-122.mp3"
+    title: "Our Song",
+    url: "/music.mp3"
   }
 ];
 
 export default function MusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true); // Start playing automatically
   const [currentSong, setCurrentSong] = useState(0);
   const [showPlaylist, setShowPlaylist] = useState(false);
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Auto-play when component mounts
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.play().catch(error => {
+        console.log("Auto-play prevented:", error);
+        setIsPlaying(false);
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (isPlaying && !audioContext) {
@@ -91,13 +93,6 @@ export default function MusicPlayer() {
     }
   };
 
-  const nextSong = () => {
-    setCurrentSong((prev) => (prev + 1) % songList.length);
-    if (isPlaying && audioRef.current) {
-      audioRef.current.play();
-    }
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -107,7 +102,7 @@ export default function MusicPlayer() {
       <audio
         ref={audioRef}
         src={songList[currentSong].url}
-        onEnded={nextSong}
+        loop
       />
 
       <div className="relative">
@@ -115,15 +110,6 @@ export default function MusicPlayer() {
           variant="outline"
           size="icon"
           className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300"
-          onClick={() => setShowPlaylist(!showPlaylist)}
-        >
-          <Music className="h-4 w-4" />
-        </Button>
-
-        <Button
-          variant="outline"
-          size="icon"
-          className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300 ml-2"
           onClick={togglePlay}
         >
           <motion.div
@@ -138,56 +124,15 @@ export default function MusicPlayer() {
           </motion.div>
         </Button>
 
-        <Button
-          variant="outline"
-          size="icon"
-          className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300 ml-2"
-          onClick={nextSong}
-        >
-          <SkipForward className="h-4 w-4" />
-        </Button>
-
-        <AnimatePresence>
-          {showPlaylist && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 10 }}
-              className="absolute bottom-full right-0 mb-2"
-            >
-              <Card className="p-2 w-48 bg-white/90 backdrop-blur-sm">
-                <h3 className="text-sm font-semibold mb-2">Playlist</h3>
-                {songList.map((song, index) => (
-                  <Button
-                    key={index}
-                    variant="ghost"
-                    className={`w-full justify-start text-sm mb-1 ${
-                      currentSong === index ? 'text-primary' : ''
-                    }`}
-                    onClick={() => {
-                      setCurrentSong(index);
-                      if (isPlaying && audioRef.current) {
-                        audioRef.current.play();
-                      }
-                    }}
-                  >
-                    {song.title}
-                  </Button>
-                ))}
-              </Card>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {isPlaying && (
+          <canvas
+            ref={canvasRef}
+            width="200"
+            height="60"
+            className="absolute -top-16 right-0 opacity-70"
+          />
+        )}
       </div>
-
-      {isPlaying && (
-        <canvas
-          ref={canvasRef}
-          width="200"
-          height="60"
-          className="absolute -top-16 right-0 opacity-70"
-        />
-      )}
     </motion.div>
   );
 }

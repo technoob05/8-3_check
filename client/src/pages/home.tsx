@@ -100,10 +100,9 @@ export default function Home() {
 
               <Gallery 
                 images={[
-                  "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?ixlib=rb-4.0.3",
-                  "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?ixlib=rb-4.0.3",
-                  "https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-4.0.3",
-                  "https://images.unsplash.com/photo-1517867065801-e20f409696b0?ixlib=rb-4.0.3"
+                  "/1.png",
+                  "/2.png",
+                  "/3.png"
                 ]} 
               />
             </motion.div>
