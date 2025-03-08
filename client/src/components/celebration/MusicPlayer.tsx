@@ -1,20 +1,100 @@
-import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Music, Pause, Play } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Music, Pause, Play, SkipForward, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+
+const songList = [
+  {
+    title: "Love Story",
+    url: "https://assets.mixkit.co/music/preview/mixkit-a-very-happy-christmas-897.mp3"
+  },
+  {
+    title: "Perfect",
+    url: "https://assets.mixkit.co/music/preview/mixkit-valley-sunset-127.mp3"
+  },
+  {
+    title: "Beautiful In White",
+    url: "https://assets.mixkit.co/music/preview/mixkit-serene-morning-light-122.mp3"
+  }
+];
 
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSong, setCurrentSong] = useState(0);
+  const [showPlaylist, setShowPlaylist] = useState(false);
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const togglePlay = () => {
+  useEffect(() => {
+    if (isPlaying && !audioContext) {
+      const context = new AudioContext();
+      const analyserNode = context.createAnalyser();
+      setAudioContext(context);
+      setAnalyser(analyserNode);
+
+      if (audioRef.current) {
+        const source = context.createMediaElementSource(audioRef.current);
+        source.connect(analyserNode);
+        analyserNode.connect(context.destination);
+      }
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (isPlaying && analyser && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      const animate = () => {
+        if (!isPlaying) return;
+
+        requestAnimationFrame(animate);
+        analyser.getByteFrequencyData(dataArray);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = (canvas.width / dataArray.length) * 2.5;
+        let x = 0;
+
+        for (let i = 0; i < dataArray.length; i++) {
+          const barHeight = dataArray[i] / 2;
+
+          const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+          gradient.addColorStop(0, '#FF69B4');
+          gradient.addColorStop(1, '#FFB6C1');
+
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+          x += barWidth + 1;
+        }
+      };
+
+      animate();
+    }
+  }, [isPlaying, analyser]);
+
+  const togglePlay = async () => {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        audioRef.current.play();
+        await audioRef.current.play();
       }
       setIsPlaying(!isPlaying);
+    }
+  };
+
+  const nextSong = () => {
+    setCurrentSong((prev) => (prev + 1) % songList.length);
+    if (isPlaying && audioRef.current) {
+      audioRef.current.play();
     }
   };
 
@@ -26,26 +106,88 @@ export default function MusicPlayer() {
     >
       <audio
         ref={audioRef}
-        src="https://assets.mixkit.co/music/preview/mixkit-a-very-happy-christmas-897.mp3"
-        loop
+        src={songList[currentSong].url}
+        onEnded={nextSong}
       />
-      <Button
-        variant="outline"
-        size="icon"
-        className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300"
-        onClick={togglePlay}
-      >
-        <motion.div
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+
+      <div className="relative">
+        <Button
+          variant="outline"
+          size="icon"
+          className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300"
+          onClick={() => setShowPlaylist(!showPlaylist)}
         >
-          {isPlaying ? (
-            <Pause className="h-4 w-4" />
-          ) : (
-            <Play className="h-4 w-4" />
+          <Music className="h-4 w-4" />
+        </Button>
+
+        <Button
+          variant="outline"
+          size="icon"
+          className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300 ml-2"
+          onClick={togglePlay}
+        >
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            {isPlaying ? (
+              <Pause className="h-4 w-4" />
+            ) : (
+              <Play className="h-4 w-4" />
+            )}
+          </motion.div>
+        </Button>
+
+        <Button
+          variant="outline"
+          size="icon"
+          className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300 ml-2"
+          onClick={nextSong}
+        >
+          <SkipForward className="h-4 w-4" />
+        </Button>
+
+        <AnimatePresence>
+          {showPlaylist && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 10 }}
+              className="absolute bottom-full right-0 mb-2"
+            >
+              <Card className="p-2 w-48 bg-white/90 backdrop-blur-sm">
+                <h3 className="text-sm font-semibold mb-2">Playlist</h3>
+                {songList.map((song, index) => (
+                  <Button
+                    key={index}
+                    variant="ghost"
+                    className={`w-full justify-start text-sm mb-1 ${
+                      currentSong === index ? 'text-primary' : ''
+                    }`}
+                    onClick={() => {
+                      setCurrentSong(index);
+                      if (isPlaying && audioRef.current) {
+                        audioRef.current.play();
+                      }
+                    }}
+                  >
+                    {song.title}
+                  </Button>
+                ))}
+              </Card>
+            </motion.div>
           )}
-        </motion.div>
-      </Button>
+        </AnimatePresence>
+      </div>
+
+      {isPlaying && (
+        <canvas
+          ref={canvasRef}
+          width="200"
+          height="60"
+          className="absolute -top-16 right-0 opacity-70"
+        />
+      )}
     </motion.div>
   );
 }

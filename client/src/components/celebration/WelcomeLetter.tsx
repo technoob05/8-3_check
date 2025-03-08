@@ -8,12 +8,11 @@ interface WelcomeLetterProps {
 
 export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
   const [isLetterOpen, setIsLetterOpen] = useState(false);
-  const [showQuestion, setShowQuestion] = useState(false);
   const [noCount, setNoCount] = useState(0);
   const [yesPressed, setYesPressed] = useState(false);
 
-  const noButtonSize = noCount * 10 + 100; // Button gets smaller
-  const yesButtonSize = noCount * 20 + 100; // Button gets bigger
+  const noButtonSize = Math.max(50, 100 - noCount * 10); // Button gets smaller
+  const yesButtonSize = 100 + noCount * 20; // Button gets bigger
 
   const handleNoClick = () => {
     setNoCount(count => count + 1);
@@ -27,7 +26,7 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-background/95 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-background/95 z-[100]">
       <AnimatePresence>
         {!isLetterOpen ? (
           <motion.div
@@ -82,8 +81,11 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
                 </motion.div>
 
                 <motion.div
-                  style={{ width: Math.max(50, noButtonSize) }}
-                  animate={{ x: noCount % 2 === 0 ? 100 : -100 }}
+                  style={{ width: noButtonSize }}
+                  animate={{ 
+                    x: noCount % 2 === 0 ? 100 : -100,
+                    scale: 1 - noCount * 0.1
+                  }}
                   whileHover={{ scale: 0.9 }}
                 >
                   <Button
