@@ -25,7 +25,7 @@ export default function Home() {
 
       return () => clearTimeout(timer);
     }
-  }, [letterOpenedened]);
+  }, [letterOpened]);
 
   const pageVariants = {
     initial: {
