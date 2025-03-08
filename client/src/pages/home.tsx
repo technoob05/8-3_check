@@ -8,6 +8,7 @@ import HeartAnimation from "@/components/celebration/HeartAnimation";
 import MusicPlayer from "@/components/celebration/MusicPlayer";
 import Fireworks from "@/components/celebration/Fireworks";
 import HandwritingText from "@/components/celebration/HandwritingText";
+import GuideCharacter from "@/components/celebration/GuideCharacter";
 
 export default function Home() {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -51,6 +52,7 @@ export default function Home() {
     <div className="min-h-screen bg-background overflow-hidden perspective-1000">
       <ParticleBackground />
       <Fireworks />
+      <GuideCharacter />
 
       <AnimatePresence>
         {showWelcome && <WelcomeScreen />}
