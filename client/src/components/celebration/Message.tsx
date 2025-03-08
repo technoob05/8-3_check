@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import HandwritingText from "./HandwritingText";
+import Fireworks from "./Fireworks"; // Assuming this component exists
 
 interface MessageProps {
   recipient: string;
@@ -13,6 +14,7 @@ export default function Message({ recipient, message }: MessageProps) {
   const [showMessage, setShowMessage] = useState(false);
   const [showStory, setShowStory] = useState(false);
   const [messageComplete, setMessageComplete] = useState(false);
+  const [showFireworks, setShowFireworks] = useState(false);
 
   // Sequence the animations
   useEffect(() => {
@@ -47,6 +49,14 @@ export default function Message({ recipient, message }: MessageProps) {
       document.dispatchEvent(messageCompleteEvent);
     }
   }, [messageComplete]);
+
+  const handleYesClick = () => {
+    setShowFireworks(true);
+    setTimeout(() => {
+      setShowStory(true); // Show the story after fireworks
+    }, 1000);
+  };
+
 
   return (
     <motion.div
@@ -109,6 +119,7 @@ export default function Message({ recipient, message }: MessageProps) {
             </motion.div>
           )}
         </AnimatePresence>
+        {showFireworks && <Fireworks />}
       </Card>
     </motion.div>
   );
