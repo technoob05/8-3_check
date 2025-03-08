@@ -21,7 +21,7 @@ export default function Home() {
       const timer = setTimeout(() => {
         setShowWelcome(false);
         setShowContent(true);
-      }, 6000); // Đợi 6 giây sau khi mở thư mới hiển thị nội dung chính
+      }, 6000);  // Đợi 6 giây sau khi mở thư mới hiển thị nội dung chính
 
       return () => clearTimeout(timer);
     }
@@ -89,14 +89,14 @@ export default function Home() {
               >
                 <HandwritingText
                   text="Gửi đến người con gái anh yêu"
-                  className="text-3xl text-rose-500 font-bold mb-4 font-handwriting"
+                  className="text-3xl text-rose-500 font-bold mb-4 font-handwriting" 
                   charDelay={100}
                 />
               </motion.div>
 
               <Message
                 recipient="Bé Bảo Trân"
-                message="Chúc bé một ngày 8/3 thật hạnh phúc và tràn ngập niềm vui. Bé là điều tuyệt vời nhất đến với cuộc sống của Tin. Cảm ơn bé, người con gái tuyệt vời nhất, vì đã luôn đồng hành và yêu thương Tin."
+                message="Chúc em một ngày 8/3 thật hạnh phúc và tràn ngập niềm vui. Em là điều tuyệt vời nhất đến với cuộc sống của anh. Cảm ơn em vì đã luôn là người phụ nữ tuyệt vời nhất."
               />
 
               <Gallery
