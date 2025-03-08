@@ -100,9 +100,9 @@ export default function Home() {
 
               <Gallery 
                 images={[
-                  "/1.png",
-                  "/2.jpg",
-                  "/3.jpg"
+                  "./1.png",
+                  "./2.jpg",
+                  "./3.jpg"
                 ]} 
               />
             </motion.div>

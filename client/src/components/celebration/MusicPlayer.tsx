@@ -1,3 +1,40 @@
+
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Music, Pause, Play, SkipForward, Volume2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+
+export default function MusicPlayer() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSong, setCurrentSong] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const analyser = useRef<AnalyserNode | null>(null);
+  const dataArray = useRef<Uint8Array | null>(null);
+
+  const songList = [
+    {
+      title: "Happy Women's Day",
+      artist: "Special Song",
+      url: "./music.mp3"
+    }
+  ];
+
+  useEffect(() => {
+    // Try to autoplay when component mounts
+    if (audioRef.current) {
+      audioRef.current.play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(error => {
+          console.log("Autoplay prevented:", error);
+          // Browser may prevent autoplay, will need user interaction
+        });
+    }
+  }, []);
+
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Music, Pause, Play, SkipForward, Volume2 } from 'lucide-react';
@@ -104,6 +141,7 @@ export default function MusicPlayer() {
         src={songList[currentSong].url}
         loop
         autoPlay
+        onCanPlay={(e) => e.currentTarget.play().catch(err => console.log("Autoplay prevented:", err))}
       />
 
       <div className="relative">
