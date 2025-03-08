@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import confetti from 'canvas-confetti';
@@ -18,7 +17,7 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
   const handleNoClick = () => {
     setNoCount((prevCount) => prevCount + 1);
     setNoButtonSize(Math.max(60, noButtonSize - 5));
-    
+
     // Cập nhật vị trí ngẫu nhiên và đảm bảo không đè lên nút Yes
     // Lấy vị trí xa hơn khỏi trung tâm
     const newX = Math.random() > 0.5 ? Math.random() * 180 : -Math.random() * 180;
@@ -37,19 +36,19 @@ export default function WelcomeLetter({ onLetterOpen }: WelcomeLetterProps) {
 
   const handleYesClick = () => {
     setYesPressed(true);
-    
+
     // Phát âm thanh chúc mừng khi nhấn "Có"
     const audio = new Audio('/yes-sound.mp3');
     audio.volume = 0.5;
     audio.play().catch(e => console.log('Auto-play prevented:', e));
-    
+
     // Hiệu ứng confetti
     confetti({
       particleCount: 150,
       spread: 70,
       origin: { y: 0.6 }
     });
-    
+
     setTimeout(() => {
       setIsLetterOpen(true);
       setTimeout(() => {

@@ -21,7 +21,7 @@ export default function Home() {
       const timer = setTimeout(() => {
         setShowWelcome(false);
         setShowContent(true);
-      }, 3000);
+      }, 6000);  // Tăng thời gian từ 3000 lên 6000 (6 giây)
 
       return () => clearTimeout(timer);
     }
@@ -89,7 +89,8 @@ export default function Home() {
               >
                 <HandwritingText
                   text="Gửi đến người con gái anh yêu"
-                  className="text-2xl text-primary font-semibold mb-4"
+                  className="text-3xl text-rose-500 font-bold mb-4 font-handwriting" 
+                  charDelay={100}
                 />
               </motion.div>
 

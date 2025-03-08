@@ -39,12 +39,14 @@ export default function HandwritingText({
               initial={{ 
                 opacity: 0, 
                 y: 10,
-                rotateZ: Math.random() * 5 * (Math.random() > 0.5 ? 1 : -1)
+                rotateZ: Math.random() * 5 * (Math.random() > 0.5 ? 1 : -1),
+                scale: 0.8
               }}
               animate={{ 
                 opacity: 1, 
                 y: 0,
-                rotateZ: 0
+                rotateZ: 0,
+                scale: 1
               }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ 

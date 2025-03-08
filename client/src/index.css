@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
 
 @keyframes heartbeat {
   0% { transform: scale(1); }
@@ -53,7 +54,7 @@
   }
 
   .font-handwriting {
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Dancing Script', 'Pacifico', cursive;
     letter-spacing: 0.02em;
   }
 

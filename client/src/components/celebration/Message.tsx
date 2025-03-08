@@ -21,7 +21,7 @@ export default function Message({ recipient, message }: MessageProps) {
 
     const messageTimer = setTimeout(() => {
       setShowStory(true);
-    }, 6000);
+    }, 10000); // Tăng thời gian để đảm bảo lời chúc hiển thị xong
 
     return () => {
       clearTimeout(recipientTimer);
