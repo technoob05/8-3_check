@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.story-progress-bar div.bg-pink-500 {
+  transition: width 5s linear;
+}
+
+.story-heart-icon {
+  animation: heartbeat 1.5s infinite;
+}
+
 @layer base {
   * {
     @apply border-border;

@@ -100,12 +100,16 @@ export default function Home() {
 
               <Gallery 
                 images={[
-                  "./1.png",
-                  "./2.jpg",
-                  "./3.jpg"
+                  "/1.jpg",
+                  "/2.png",
+                  "/3.jpg",
+                  "/5.png",
+                  "/6.png",
+                  "/7.jpg",
+                  "/8.jpg"
                 ]} 
               />
-            </motion.div>
+              </motion.div>
           </>
         )}
       </AnimatePresence>
