@@ -1,5 +1,8 @@
-import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Card } from "@/components/ui/card";
+import HandwritingText from "./HandwritingText";
 
 interface MessageProps {
   recipient: string;
@@ -7,56 +10,91 @@ interface MessageProps {
 }
 
 export default function Message({ recipient, message }: MessageProps) {
+  const [showRecipient, setShowRecipient] = useState(true);
+  const [showMessage, setShowMessage] = useState(false);
+  const [showStory, setShowStory] = useState(false);
+
+  useEffect(() => {
+    const recipientTimer = setTimeout(() => {
+      setShowMessage(true);
+    }, 2000);
+
+    const messageTimer = setTimeout(() => {
+      setShowStory(true);
+    }, 6000);
+
+    return () => {
+      clearTimeout(recipientTimer);
+      clearTimeout(messageTimer);
+    };
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5 }}
-      className="my-12"
+      transition={{ duration: 0.5 }}
+      className="mb-12"
     >
-      <Card className="max-w-2xl mx-auto bg-card/50 backdrop-blur transform hover:scale-105 transition-transform duration-300">
-        <CardContent className="p-6">
-          <motion.div
-            initial={{ x: -20 }}
-            animate={{ x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-3xl font-bold text-primary mb-4 relative font-handwriting">
-              Gửi {recipient} yêu quý,
-              <motion.span
-                className="absolute -top-1 -right-4 text-2xl"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 10, -10, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                }}
+      <Card className="p-6 bg-white/90 backdrop-blur-sm shadow-lg border-pink-200 overflow-hidden">
+        <div className="space-y-4">
+          <AnimatePresence>
+            {showRecipient && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mb-4"
               >
-                💝
-              </motion.span>
-            </h2>
-          </motion.div>
-          <motion.p
-            className="text-lg leading-relaxed text-foreground font-handwriting"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-          >
-            Nhân ngày Quốc tế Phụ nữ, Tin muốn gửi đến bé những lời chúc tốt đẹp
-            nhất.
-          </motion.p>
-          <HandwritingText
-            text="Bé là nguồn cảm hứng và niềm hạnh phúc của cuộc đời Tin. Cảm
-            ơn bé đã luôn ở bên Tin và làm cho cuộc sống của anh trở nên tuyệt
-            vời hơn mỗi ngày."
-            className="text-rose-600 font-handwriting text-lg mt-4 leading-relaxed"
-            charDelay={40}
-          />
-          <p className="text-2xl mt-6 font-handwriting text-primary">Mãi Yêu Bé ❤️</p>
-        </CardContent>
+                <HandwritingText
+                  text={`Gửi ${recipient}`}
+                  className="text-2xl font-handwriting text-primary"
+                  charDelay={80}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {showMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mb-4"
+              >
+                <HandwritingText
+                  text={message}
+                  className="text-xl font-handwriting text-rose-600 leading-relaxed"
+                  charDelay={60}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {showStory && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mt-8 space-y-6"
+              >
+                <HandwritingText
+                  text="Bé là nguồn cảm hứng và niềm hạnh phúc của cuộc đời Tin. Cảm ơn bé đã luôn ở bên Tin và làm cho cuộc sống của anh trở nên tuyệt vời hơn mỗi ngày."
+                  className="text-rose-600 font-handwriting text-lg leading-relaxed"
+                  charDelay={40}
+                />
+                <p className="text-2xl mt-6 font-handwriting text-primary">
+                  Yêu em,
+                </p>
+                <p className="text-2xl font-handwriting text-primary">
+                  Tin
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </Card>
     </motion.div>
   );

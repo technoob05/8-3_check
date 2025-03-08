@@ -50,24 +50,6 @@ export default function WelcomeScreen() {
               className="text-3xl font-semibold text-primary font-handwriting"
               charDelay={100}
             />
-            />
-            />
-          </motion.div>
-            />
-            <motion.div
-              className="invisible"
-              animate={{
-                scale: [1, 1.05, 1],
-                filter: ["brightness(1)", "brightness(1.2)", "brightness(1)"]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
-              Trương Bảo Trân
-            </motion.p>
           </motion.div>
         </motion.div>
       </Card>
