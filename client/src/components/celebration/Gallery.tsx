@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/carousel";
 
 export default function Gallery() {
-  // Make sure to use the correct paths to images
+  // Images from public directory
   const images = [
     '/1.png',
     '/2.jpg',
